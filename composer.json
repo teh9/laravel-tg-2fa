@@ -1,6 +1,14 @@
 {
     "name": "teh9/laravel2fa",
+    "description": "A simple two-factor authentication via telegram implementation for Laravel",
     "license": "MIT",
+    "keywords": [
+        "telegram",
+        "laravel",
+        "2fa",
+        "two-factor",
+        "auth"
+    ],
     "autoload": {
         "psr-4": {
             "Teh9\\Laravel2fa\\": "src/"
@@ -8,11 +16,22 @@
     },
     "authors": [
         {
-            "name": "teh9",
+            "name": "Tengiz 'teh9' Gusev",
             "email": "tengizs.gusevs@gmail.com"
         }
     ],
     "require": {
-        "spatie/laravel-package-tools": "^1.9.2"
-    }
+        "spatie/laravel-package-tools": "^1.9.2",
+        "php": "^7.4|^8.0|^8.1"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Teh9\\Laravel2fa\\AuthTwoFactorServiceProvider"
+            ],
+            "aliases": {}
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
 }
