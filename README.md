@@ -1,4 +1,4 @@
-## Laravel two-factor authentication via Telegram
+# Laravel two-factor authentication via Telegram
 
 A simple two-factor implementation using Telegram.
 
@@ -21,16 +21,28 @@ In your project folder **config/auth.php**, provide bot api key it can be receiv
 
 ### Migrations
 
-Add columns to your user or some other (admin_users) model:
+#### Add columns to your user or some other (admin_users) model:
+Chat id for you and your users can be found <a href="https://telegram.me/getmyid_bot">here</a>.
 ```php
 $table->bigInteger('chat_id')->nullable()->default(null);
+```
+
+```php
 $table->string("secret")->nullable()->default(null);
 ```
 
-Prepare User Model:
+### Languages
+
+In **resources/lang/(YOUR_LANG)/auth.php** put in array this (better to use "" instead of ''):
+```php 
+'2fa' => "Attempt to login! \r\n\r\nConfirmation code: %code%"
+//If you want to customize text, somewhere need to place this part: %code% to diplsay code for your user
+```
+
+### Prepare User Model:
 
 ```php 
-Class User extends Model implements AuthTwoFactor
+class User extends Model implements AuthTwoFactor
 {
     use HasAuth;
 }
@@ -49,7 +61,13 @@ $user->setSecretCode('ru', 4); // return boolean
 ### Validate code
 
 ```php 
-$code = 'CODE_FROM_TELEGRAM'; // The received code from the telegram must be passed to the method, which is described below
+// The received code from the telegram must be passed to the method, which is described below
+$code = 'CODE_FROM_TELEGRAM'; 
 $user = User::first();
 $user->verifySecret($code); // return boolean
 ```
+
+## License
+
+The MIT License (MIT). Please see <a href="https://github.com/teh9/laravel-tg-2fa/blob/master/LICENSE">License File</a> for more information.
+
