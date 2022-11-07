@@ -48,7 +48,7 @@ class User extends Model implements AuthTwoFactor
 }
 ```
 
-### Save code in database and send notification with code telegram
+### Save code in database and send notification with code in telegram
 
 ```php 
 $user = User::first();
