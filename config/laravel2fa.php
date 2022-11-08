@@ -1,5 +1,5 @@
 <?php
 
 return [
-    'api-key' => '' // Here is your bot api key
+    'api_key' => '' // Here is your bot api key
 ];

@@ -21,13 +21,12 @@
         }
     ],
     "require": {
-        "spatie/laravel-package-tools": "^1.9.2",
         "php": "^7.4|^8.0|^8.1"
     },
     "extra": {
         "laravel": {
             "providers": [
-                "Teh9\\Laravel2fa\\AuthTwoFactorServiceProvider"
+                "Teh9\\Laravel2fa\\TelegramTwoFactorServiceProvider"
             ],
             "aliases": {}
         }

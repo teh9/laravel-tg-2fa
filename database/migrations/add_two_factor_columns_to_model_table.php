@@ -9,6 +9,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
+            $table->bigInteger('chat_id')->nullable()->default(null);
             $table->string("secret")->nullable()->default(null);
         });
     }
@@ -16,6 +17,7 @@ return new class extends Migration
     public function down()
     {
         Schema::table('users', function (Blueprint $table) {
+            $table->dropColumns("chat_id");
             $table->dropColumns("secret");
         });
     }
