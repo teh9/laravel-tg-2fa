@@ -4,7 +4,7 @@ namespace Teh9\Laravel2fa\Interfaces;
 
 interface TelegramTwoFactor
 {
-    public function setSecretCode (string $lang = 'en', int $codeLength = 6): bool;
+    public function setSecretCode (int $codeLength = 6, string $lang = 'en'): bool;
 
     public function verifySecret (string $code): bool;
 }

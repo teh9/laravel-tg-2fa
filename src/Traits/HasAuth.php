@@ -34,7 +34,7 @@ trait HasAuth
      * @throws SecretIsNull
      * @throws ApiKeyNotProvided
      */
-    public function setSecretCode (string $lang = 'en', int $codeLength = 6): bool
+    public function setSecretCode (int $codeLength = 6, string $lang = 'en'): bool
     {
         $this->language = $lang;
 
@@ -49,7 +49,7 @@ trait HasAuth
         return $this->sendNotification();
     }
 
-    public function verifySecret (string $code): bool
+    public function validateCode (string $code): bool
     {
         if (Hash::check($code, $this->secret)) {
             $this->forceFill(['secret' => null])->save();
@@ -127,6 +127,9 @@ trait HasAuth
         return json_decode($response, true);
     }
 
+    /**
+     * @throws TelegramException
+     */
     private function verifyResponse (object $data): bool
     {
         $response = $this->parseResponse($data);
