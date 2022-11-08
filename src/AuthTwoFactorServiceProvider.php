@@ -2,17 +2,14 @@
 
 namespace Teh9\Laravel2fa;
 
-use Spatie\LaravelPackageTools\Package;
-use Spatie\LaravelPackageTools\PackageServiceProvider;
+use Illuminate\Support\ServiceProvider;
 
-class AuthTwoFactorServiceProvider extends PackageServiceProvider
+class AuthTwoFactorServiceProvider extends ServiceProvider
 {
-    public function configurePackage(Package $package): void
+    public function boot ()
     {
-        $package
-            ->name('laravel2fa')
-            ->hasConfigFile()
-            ->hasMigration('add_chat_id_column_to_model_table')
-            ->hasMigration('add_secret_column_to_model_table');
+        $this->publishes([
+            __DIR__ . '/../config/laravel2fa.php' => config_path('laravel2fa.php'),
+        ], 'config');
     }
 }

@@ -2,7 +2,7 @@
 
 namespace Teh9\Laravel2fa\Interfaces;
 
-interface AuthTwoFactor
+interface TelegramTwoFactor
 {
     public function setSecretCode (string $lang = 'en', int $codeLength = 6): bool;
 
