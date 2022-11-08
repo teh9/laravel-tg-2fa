@@ -1,19 +1,25 @@
 # Laravel two-factor authentication via Telegram
 
-A simple two-factor implementation using Telegram.
+A simple two-factor implementation using Telegram for Laravel.
 
 ## Installation
 
-Package may be installed via composer
+You can install the package via composer:
 ```
 composer require teh9/laravel2fa
+```
+
+Publish the package config, migrations & localizations files.
+
+```
+php artisan vendor:publish --provider="Teh9\Laravel2fa\TelegramTwoFactorServiceProvider"
 ```
 
 ## Usage
 
 ### Set up
 
-In your project folder **config/auth.php**, provide bot api key it can be received by official telegram bot <a href="https://telegram.me/BotFather">@BotFather</a> 
+In your project folder **config/laravel2fa.php**, provide bot api key it can be received by official telegram bot <a href="https://telegram.me/BotFather">@BotFather</a> 
 
 ```php 
 'api_key' => 'YOUR_BOT_API_KEY'
@@ -21,28 +27,31 @@ In your project folder **config/auth.php**, provide bot api key it can be receiv
 
 ### Migrations
 
-#### Add columns to your user or some other (admin_users) model:
-Chat id for you and your users can be found <a href="https://telegram.me/getmyid_bot">here</a>.
-```php
-$table->bigInteger('chat_id')->nullable()->default(null);
+After publishing, you will have migration, execute:
+
+``` 
+php artisan migrate
 ```
 
-```php
-$table->string("secret")->nullable()->default(null);
+Will be added 2 columns for **users** table, if you want change table you can do it in migration file:
+**database/migrations/add_two_factor_columns_to_model_table.php**
+```
+chat_id - big integer|nullable|deafult-null
+secret  - string     |nullable|default-null
 ```
 
 ### Languages
 
-In **resources/lang/(YOUR_LANG)/auth.php** put in array this (better to use "" instead of ''):
-```php 
-'2fa' => "Attempt to login! \r\n\r\nConfirmation code: %code%"
-//If you want to customize text, somewhere need to place this part: %code% to diplsay code for your user
-```
+2 languages are available in files **/resources/lang/<a href="javascript:void(0)">[lang]</a>/2fa.php**:
+- en;
+- ru;
 
-### Prepare User Model:
+You can add any else but watch on existed implementations on how to make it correctly
+
+### Prepare Users Model:
 
 ```php 
-class User extends Model implements AuthTwoFactor
+class User extends Model implements TelegramTwoFactor
 {
     use HasAuth;
 }
@@ -53,9 +62,9 @@ class User extends Model implements AuthTwoFactor
 ```php 
 $user = User::first();
 // Might be passed 2 params
-// 1-st is language by default en
-// 2-nd preffered length of code by default 6
-$user->setSecretCode('ru', 4); // return boolean
+// 1-st preffered length of code by default 6
+// 2-nd is language by default en
+$user->sendCode(4, 'ru'); // return boolean
 ```
 
 ### Validate code
@@ -64,7 +73,7 @@ $user->setSecretCode('ru', 4); // return boolean
 // The received code from the telegram must be passed to the method, which is described below
 $code = 'CODE_FROM_TELEGRAM'; 
 $user = User::first();
-$user->verifySecret($code); // return boolean
+$user->validateCode($code); // return boolean
 ```
 
 ## License
