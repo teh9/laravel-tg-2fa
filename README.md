@@ -42,7 +42,7 @@ secret  - string     |nullable|default-null
 
 ### Languages
 
-2 languages are available in files **/resources/lang/<a href="javascript:void(0)">[lang]</a>/2fa.php**:
+2 languages are available in files **/resources/lang/<a href="#">[lang]</a>/2fa.php**:
 - en;
 - ru;
 
