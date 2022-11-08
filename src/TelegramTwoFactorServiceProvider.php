@@ -12,6 +12,8 @@ class TelegramTwoFactorServiceProvider extends ServiceProvider
             __DIR__ . '/../config/laravel2fa.php' => config_path('laravel2fa.php'),
         ], 'config');
 
+        $this->loadTranslationsFrom(__DIR__ . '/../resources/lang/', 'laravel2fa');
+
         $this->publishMigrations();
     }
 

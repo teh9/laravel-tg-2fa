@@ -6,12 +6,18 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
+use Teh9\Laravel2fa\Exceptions\ApiKeyNotProvided;
 use Teh9\Laravel2fa\Exceptions\ChatIdIsNull;
 use Teh9\Laravel2fa\Exceptions\SecretIsNull;
 use Teh9\Laravel2fa\Exceptions\TelegramException;
 
 trait HasAuth
 {
+    /**
+     * @var string
+     */
+    private string $apiKey;
+
     /**
      * @var string
      */
@@ -22,6 +28,12 @@ trait HasAuth
      */
     private string $language;
 
+    /**
+     * @throws TelegramException
+     * @throws ChatIdIsNull
+     * @throws SecretIsNull
+     * @throws ApiKeyNotProvided
+     */
     public function setSecretCode (string $lang = 'en', int $codeLength = 6): bool
     {
         $this->language = $lang;
@@ -40,16 +52,17 @@ trait HasAuth
     public function verifySecret (string $code): bool
     {
         if (Hash::check($code, $this->secret)) {
-            $this->forceFill([
-                'secret' => null
-            ])->save();
+            $this->forceFill(['secret' => null])->save();
 
             return true;
-        };
+        }
 
         return false;
     }
 
+    /**
+     * @throws SecretIsNull
+     */
     public function throwExceptionIfSecretIsNull ()
     {
         if (is_null($this->secret)) {
@@ -57,6 +70,9 @@ trait HasAuth
         }
     }
 
+    /**
+     * @throws ChatIdIsNull
+     */
     public function throwExceptionIfChatIdIsNull ()
     {
         if (is_null($this->chat_id)) {
@@ -64,15 +80,34 @@ trait HasAuth
         }
     }
 
+    /**
+     * @throws ApiKeyNotProvided
+     */
+    public function throwExceptionNoApiKey (): string
+    {
+        $this->apiKey = config('laravel2fa.api_key');
+
+        if (empty($this->apiKey)) {
+            throw new ApiKeyNotProvided();
+        }
+
+        return $this->apiKey;
+    }
+
     private function generateSecretCode (int $codeLength): string
     {
         return $this->code = strtoupper(Str::random($codeLength));
     }
 
-    private function sendNotification ()
+    /**
+     * @throws ApiKeyNotProvided
+     * @throws TelegramException
+     */
+    private function sendNotification (): bool
     {
-        $apiKey = config('auth.api_key');
-        $post = Http::post('https://api.telegram.org/bot'. $apiKey .'/sendMessage', [
+        $this->throwExceptionNoApiKey();
+
+        $post = Http::post('https://api.telegram.org/bot'. $this->apiKey .'/sendMessage', [
             'chat_id' => $this->chat_id,
             'text'    => $this->getText()
         ]);
@@ -80,11 +115,11 @@ trait HasAuth
         return $this->verifyResponse($post);
     }
 
-    private function getText ()
+    private function getText (): string
     {
         App::setlocale($this->language);
 
-        return str_replace('%code%', $this->code, trans('auth.2fa'));
+        return str_replace('%code%', $this->code, trans('2fa.login_attempt'));
     }
 
     private function parseResponse (string $response): array
@@ -92,7 +127,7 @@ trait HasAuth
         return json_decode($response, true);
     }
 
-    private function verifyResponse (object $data)
+    private function verifyResponse (object $data): bool
     {
         $response = $this->parseResponse($data);
 
