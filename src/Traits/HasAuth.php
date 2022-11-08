@@ -5,6 +5,7 @@ namespace Teh9\Laravel2fa\Traits;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
 use Teh9\Laravel2fa\Exceptions\ApiKeyNotProvided;
 use Teh9\Laravel2fa\Exceptions\ChatIdIsNull;
@@ -34,7 +35,7 @@ trait HasAuth
      * @throws SecretIsNull
      * @throws ApiKeyNotProvided
      */
-    public function setSecretCode (int $codeLength = 6, string $lang = 'en'): bool
+    public function sendCode (int $codeLength = 6, string $lang = 'en'): bool
     {
         $this->language = $lang;
 
@@ -65,9 +66,7 @@ trait HasAuth
      */
     public function throwExceptionIfSecretIsNull ()
     {
-        if (is_null($this->secret)) {
-            throw new SecretIsNull();
-        }
+        Schema::hasColumn($this->getTable(), 'secret') ?: throw new SecretIsNull();
     }
 
     /**
@@ -83,15 +82,13 @@ trait HasAuth
     /**
      * @throws ApiKeyNotProvided
      */
-    public function throwExceptionNoApiKey (): string
+    public function throwExceptionNoApiKey ()
     {
         $this->apiKey = config('laravel2fa.api_key');
 
         if (empty($this->apiKey)) {
             throw new ApiKeyNotProvided();
         }
-
-        return $this->apiKey;
     }
 
     private function generateSecretCode (int $codeLength): string
