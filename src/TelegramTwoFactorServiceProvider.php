@@ -15,7 +15,7 @@ class TelegramTwoFactorServiceProvider extends ServiceProvider
         $this->loadTranslationsFrom(__DIR__ . '/../resources/lang/', 'laravel2fa');
 
         $this->publishes([
-            __DIR__ . '/../resources/lang/' => resource_path('lang/vendor/laravel2fa'),
+            __DIR__ . '/../resources/lang/' => resource_path('lang/'),
         ], 'translations');
 
         $this->publishMigrations();
