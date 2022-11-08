@@ -6,5 +6,5 @@ interface TelegramTwoFactor
 {
     public function setSecretCode (int $codeLength = 6, string $lang = 'en'): bool;
 
-    public function verifySecret (string $code): bool;
+    public function validateCode (string $code): bool;
 }
