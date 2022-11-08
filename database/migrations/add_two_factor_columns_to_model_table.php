@@ -9,8 +9,8 @@ return new class extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->bigInteger('chat_id')->nullable()->default(null);
-            $table->string("secret")->nullable()->default(null);
+            $table->bigInteger("chat_id")->nullable()->default(null);
+            $table->string("secret", 75)->nullable()->default(null);
         });
     }
 
