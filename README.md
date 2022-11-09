@@ -2,6 +2,10 @@
 
 A simple two-factor implementation using Telegram for Laravel.
 
+![Packagist Downloads](https://img.shields.io/packagist/dt/teh9/laravel-tg-2fa)
+![Packagist Version](https://img.shields.io/packagist/v/teh9/laravel-tg-2fa)
+![Packagist License](https://img.shields.io/packagist/l/teh9/laravel-tg-2fa)
+
 ## Installation
 
 You can install the package via composer:
