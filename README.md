@@ -13,7 +13,7 @@ You can install the package via composer:
 composer require teh9/laravel2fa
 ```
 
-Publish the package config, migrations & localizations files.
+Publish the package config, migrations & localizations files:
 
 ```
 php artisan vendor:publish --provider="Teh9\Laravel2fa\TelegramTwoFactorServiceProvider"
@@ -23,7 +23,7 @@ php artisan vendor:publish --provider="Teh9\Laravel2fa\TelegramTwoFactorServiceP
 
 ### Set up
 
-In your project folder **config/laravel2fa.php**, provide bot api key it can be received by official telegram bot <a href="https://telegram.me/BotFather">@BotFather</a> 
+In your project folder `config/laravel2fa.php`, provide bot api key it can be received by official telegram bot <a href="https://telegram.me/BotFather">@BotFather</a> 
 
 ```php 
 'api_key' => 'YOUR_BOT_API_KEY'
@@ -38,7 +38,7 @@ php artisan migrate
 ```
 
 Will be added 2 columns for **users** table, if you want change table you can do it in migration file:
-**database/migrations/add_two_factor_columns_to_model_table.php**
+`database/migrations/add_two_factor_columns_to_model_table.php`
 ```
 chat_id - big integer|nullable|deafult-null
 secret  - string     |nullable|default-null
@@ -46,7 +46,7 @@ secret  - string     |nullable|default-null
 
 ### Languages
 
-2 languages are available in files **/resources/lang/<a href="#">[lang]</a>/2fa.php**:
+2 languages are available in files **/resources/lang/`[lang]`/2fa.php**:
 - en;
 - ru;
 
