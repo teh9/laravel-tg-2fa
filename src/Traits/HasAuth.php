@@ -35,7 +35,7 @@ trait HasAuth
      * @throws SecretIsNull
      * @throws ApiKeyNotProvided
      */
-    public function sendCode (int $codeLength = 6, string $lang = 'en'): bool
+    public function sendCode(int $codeLength = 6, string $lang = 'en'): bool
     {
         $this->language = $lang;
 
@@ -50,7 +50,7 @@ trait HasAuth
         return $this->sendNotification();
     }
 
-    public function validateCode (string $code): bool
+    public function validateCode(string $code): bool
     {
         if (Hash::check($code, $this->secret)) {
             $this->forceFill(['secret' => null])->save();
@@ -58,13 +58,14 @@ trait HasAuth
             return true;
         }
 
+        $this->forceFill(['secret' => null])->save();
         return false;
     }
 
     /**
      * @throws SecretIsNull
      */
-    public function throwExceptionIfSecretIsNull ()
+    public function throwExceptionIfSecretIsNull()
     {
         Schema::hasColumn($this->getTable(), 'secret') ?: throw new SecretIsNull();
     }
@@ -72,7 +73,7 @@ trait HasAuth
     /**
      * @throws ChatIdIsNull
      */
-    public function throwExceptionIfChatIdIsNull ()
+    public function throwExceptionIfChatIdIsNull()
     {
         if (is_null($this->chat_id)) {
             throw new ChatIdIsNull();
@@ -82,7 +83,7 @@ trait HasAuth
     /**
      * @throws ApiKeyNotProvided
      */
-    public function throwExceptionNoApiKey ()
+    public function throwExceptionNoApiKey()
     {
         $this->apiKey = config('laravel2fa.api_key');
 
@@ -91,7 +92,7 @@ trait HasAuth
         }
     }
 
-    private function generateSecretCode (int $codeLength): string
+    private function generateSecretCode(int $codeLength): string
     {
         return $this->code = strtoupper(Str::random($codeLength));
     }
@@ -100,7 +101,7 @@ trait HasAuth
      * @throws ApiKeyNotProvided
      * @throws TelegramException
      */
-    private function sendNotification (): bool
+    private function sendNotification(): bool
     {
         $this->throwExceptionNoApiKey();
 
@@ -112,7 +113,7 @@ trait HasAuth
         return $this->verifyResponse($post);
     }
 
-    private function getText (): string
+    private function getText(): string
     {
         App::setlocale($this->language);
 
@@ -127,7 +128,7 @@ trait HasAuth
     /**
      * @throws TelegramException
      */
-    private function verifyResponse (object $data): bool
+    private function verifyResponse(object $data): bool
     {
         $response = $this->parseResponse($data);
 
